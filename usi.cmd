@@ -1,5 +1,5 @@
 :: Universal Symlink Installer
-:: Author: wvzxn // https://github.com/wvzxn
+:: Author: wvzxn // https://github.com/wvzxn/universal-symlink-installer
 @echo off
 if not "%1"=="am_admin" ( powershell start -verb runas '%0' 'am_admin "%~1" "%~2"' & exit )
 setlocal EnableDelayedExpansion
@@ -55,3 +55,6 @@ echo !_line_!
 setlocal DisableDelayedExpansion
 echo Done!
 pause
+
+::: echo Please read https://github.com/wvzxn/universal-symlink-installer#usage
+::: start "" https://github.com/wvzxn/universal-symlink-installer#usage
