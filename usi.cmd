@@ -1,4 +1,4 @@
-:: Universal Symlink Installer v1.2
+:: Universal Symlink Installer v1.3
 :: Author: wvzxn // https://github.com/wvzxn/universal-symlink-installer
 @echo off
 if not "%1"=="am_admin" ( powershell start -verb runas '%0' 'am_admin "%~1" "%~2"' & exit )
@@ -23,13 +23,21 @@ for /f "usebackq delims=" %%A in (` findstr /b ::: "%~f0" `) do (
     for /f "usebackq delims=" %%I in (` powershell "if ('!par!' -like '/*' -or '!par!' -like 'C\') {echo 1} else {echo 2}" `) do (
         if %%I EQU 2 ( !i! ) else (
             if "!par!"=="//" ( echo !i:~3!>> .usi ) else (
-                if "!par!"=="C\" ( set "source=!i!" & set "par=" ) else ( set "source=!i:~3!" & set "par=!par! " )
+                if "!par!"=="C\" (
+                    set "source=!i!"
+                    if exist "%~dp0!source!\*" ( set "par=/d " ) else ( set "par=" )
+                ) else (
+                    set source=!i:~3!
+                    set "par=!par! "
+                )
                 set "link=C:\!source:~2!"
                 set link=!link:^(Name^)=%username%!
                 set "source=%~dp0!source!"
-                for /f "usebackq delims=" %%A in (` powershell "Split-Path '!link!' -Parent" `) do if not exist "%%A" ( md "%%A" )
-                mklink !par!"!link!" "!source!"
-                echo !link!>> .usi
+                for /f "usebackq delims=" %%J in (` powershell "Split-Path '!link!' -Parent" `) do if not exist "%%J" ( md "%%J" )
+                if exist "!link!" ( echo !link! exists ) else (
+                    mklink !par!"!link!" "!source!"
+                    echo !link!>> .usi
+                )
             )
         )
     )
@@ -50,11 +58,11 @@ attrib -h .usi
 echo Removing...
 for /f "tokens=*" %%A in (.usi) do (
     set "par=%%A" & set par=!par:~0,2!
-    if not "!par!"=="C:" ( %%A ) else (
-        echo %%A
+    if "!par!"=="C:" (
+        echo - %%A
         del /q "%%A"
         rd /s /q "%%A"
-    )
+    ) else ( %%A )
 )
 del /q /f .usi
 echo !_line_!
