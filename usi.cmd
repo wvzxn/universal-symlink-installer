@@ -1,4 +1,4 @@
-:: Universal Symlink Installer
+:: Universal Symlink Installer v1.2
 :: Author: wvzxn // https://github.com/wvzxn/universal-symlink-installer
 @echo off
 if not "%1"=="am_admin" ( powershell start -verb runas '%0' 'am_admin "%~1" "%~2"' & exit )
@@ -34,8 +34,10 @@ for /f "usebackq delims=" %%A in (` findstr /b ::: "%~f0" `) do (
         )
     )
 )
-attrib +h .usi
-icacls .usi /deny *S-1-1-0:F /Q 1>nul
+if exist .usi (
+    attrib +h .usi
+    icacls .usi /deny *S-1-1-0:F /Q 1>nul
+)
 echo !_line_!
 goto:end
 
