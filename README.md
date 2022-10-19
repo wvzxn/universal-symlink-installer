@@ -1,12 +1,14 @@
 # UNIVERSAL SYMLINK INSTALLER
 
+##### *version: 1.2*
+
 Simple script that will help you speed up the Symlink creation process on Windows OS.  
 It acts as both an installer and a uninstaller.
 
 ## Usage
-1. Place the **`usi.cmd`** file near the folder **`C`**, which may contain folders **`Program Files`**, **`ProgramData`**, **`Users`**, etc.
-2. Open **`usi.cmd`** as a text document and add [commands](https://github.com/wvzxn/universal-symlink-installer#commands) to execute.
-3. Run **`usi.cmd`**.
+1. Place the [**`usi.cmd`**](https://github.com/wvzxn/universal-symlink-installer/releases/latest/download/usi.cmd) file near the folder **`C`**, which may contain folders **`Program Files`**, **`ProgramData`**, **`Users`**, etc.
+2. Open [**`usi.cmd`**](https://github.com/wvzxn/universal-symlink-installer/releases/latest/download/usi.cmd) as a text document and add [commands](https://github.com/wvzxn/universal-symlink-installer#commands) to execute.
+3. Run [**`usi.cmd`**](https://github.com/wvzxn/universal-symlink-installer/releases/latest/download/usi.cmd).
 
 To work correctly, you must recreate the system folder structure:
 - :file_folder: ***..***
@@ -85,3 +87,4 @@ To execute the command only on uninstall add `//` parameter to the beginning of 
 ::: regedit -s "add registry key.reg"
 ::: // regedit -s "del registry key.reg"
 ```
+![image](https://user-images.githubusercontent.com/87862400/196770511-e46fc197-1138-4cf4-ae96-495fa2bd3ee9.png)
