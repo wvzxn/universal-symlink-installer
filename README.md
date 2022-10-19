@@ -1,6 +1,6 @@
 # UNIVERSAL SYMLINK INSTALLER
 
-##### *version: 1.2*
+##### *version: 1.3*
 
 Simple script that will help you speed up the Symlink creation process on Windows OS.  
 It acts as both an installer and a uninstaller.
@@ -37,7 +37,7 @@ ___
 The script recognizes the shortened [`mklink`](https://ss64.com/nt/mklink.html) command as shown below:
 
 - `C\..\..`&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; — &nbsp;&nbsp;(default)  
-- `/d C\..\..`&nbsp;&nbsp; — &nbsp;&nbsp;Directory symbolic link (default is file)  
+- `/d C\..\..`&nbsp;&nbsp; — &nbsp;&nbsp;Directory symbolic link (from [v1.3](https://github.com/wvzxn/universal-symlink-installer/releases/tag/v1.3) not necessary)  
 - `/h C\..\..`&nbsp;&nbsp; — &nbsp;&nbsp;Hard link  
 - `/j C\..\..`&nbsp;&nbsp; — &nbsp;&nbsp;Directory Junction
 
@@ -82,9 +82,9 @@ To execute the command only on uninstall add `//` parameter to the beginning of 
 ```
 :: Some info :)
 ::: C\Program Files\Example Company\Example Product File.dll
-::: /d C\Program Files\Example Company\Example Product
-::: /d C\Users\(Name)\Appdata\Roaming\Example Company\Example Product Data Folder
+::: C\Program Files\Example Company\Example Product Folder
+::: C\Users\(Name)\Appdata\Roaming\Example Company\Example Product Data Folder
 ::: regedit -s "add registry key.reg"
 ::: // regedit -s "del registry key.reg"
 ```
-![image](https://user-images.githubusercontent.com/87862400/196770511-e46fc197-1138-4cf4-ae96-495fa2bd3ee9.png)
+![image](https://user-images.githubusercontent.com/87862400/196798049-839c3736-d44b-44b6-b2a6-88a2aa4b78a9.png)
