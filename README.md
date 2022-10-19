@@ -1,13 +1,14 @@
 # UNIVERSAL SYMLINK INSTALLER
-Simple script that will help you speed up the Symlink creation process on Windows OS.
 
+Simple script that will help you speed up the Symlink creation process on Windows OS.  
 It acts as both an installer and a uninstaller.
+
 ## Usage
 1. Place the **`usi.cmd`** file near the folder **`C`**, which may contain folders **`Program Files`**, **`ProgramData`**, **`Users`**, etc.
-2. Open **`usi.cmd`** as a text document and add commands to execute.
-3. Run **`usi.cmd`**
+2. Open **`usi.cmd`** as a text document and add [commands](https://github.com/wvzxn/universal-symlink-installer#commands) to execute.
+3. Run **`usi.cmd`**.
 
-To work correctly, you must recreate the system folder structure.
+To work correctly, you must recreate the system folder structure:
 - :file_folder: ***..***
   - :hammer_and_wrench: ***usi.cmd***
   - :file_folder: ***C***
@@ -20,28 +21,48 @@ To work correctly, you must recreate the system folder structure.
         - :file_folder: ***..***
 
 *`(Name)` will be changed to [`%username%`](https://ss64.com/nt/syntax-variables.html)*
+
 ## Commands
-Lines starting with `:::` are recognized by the script as commands to execute <sup>*Do not confuse with comments `::`*</sup>
 
-The script recognizes the shortened [`mklink`](https://ss64.com/nt/mklink.html) command as shown below
-```
-C\..\..       ||    (default)
-/d C\..\..    ||    Directory symbolic link (default is file)
-/h C\..\..    ||    Hard link
-/j C\..\..    ||    Directory Junction
-```
-There is also no need to put quotation marks
+Lines starting with `:::` are recognized by the script as commands to execute. <sup>*Do not confuse with comments `::`*</sup>
 
-:heavy_check_mark: `C\..\..\file`
+:heavy_check_mark: `:: C\..\..` - a comment, nothing will happen  
+:heavy_check_mark: `::: C\..\..` - the correct command  
+:x: `:::: C\..\..` , `::::: C\..\..` - may cause an error
 
-:x: `"C\..\..\file"`
 ___
-You can also run standard commands like `md ..`.
-But line that starts with `/` and `C\` can cause an error.
+
+The script recognizes the shortened [`mklink`](https://ss64.com/nt/mklink.html) command as shown below:
+
+- `C\..\..`&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; — &nbsp;&nbsp;(default)  
+- `/d C\..\..`&nbsp;&nbsp; — &nbsp;&nbsp;Directory symbolic link (default is file)  
+- `/h C\..\..`&nbsp;&nbsp; — &nbsp;&nbsp;Hard link  
+- `/j C\..\..`&nbsp;&nbsp; — &nbsp;&nbsp;Directory Junction
+
+There is no need to put quotation marks
+
+:heavy_check_mark: `::: C\..\..\file`  
+:x: `::: "C\..\..\file"`
+
+___
+
+You can also run standard commands like `md`, `icacls` etc. <sup>*In this case, you can use quotation marks*</sup>
+
+:heavy_check_mark: `::: attrib +h "C\..\..\file"`  
+:heavy_check_mark: `::: echo Adding reg key...`  
+:heavy_check_mark: `::: regedit -s add_key.reg`
+
+To execute the command only on uninstall add `//` parameter to the beginning of the line.
+
+:heavy_check_mark: `::: // attrib -h "C\..\..\file"`  
+:heavy_check_mark: `::: // echo Removing reg key...`  
+:heavy_check_mark: `::: // regedit -s del_key.reg`
+
 ## Example
 - :file_folder: ***Example Folder***
   - :hammer_and_wrench: ***usi.cmd***
-  - :old_key: ***registry_key.reg***
+  - :old_key: ***add registry key.reg***
+  - :old_key: ***del registry key.reg***
   - :file_folder: ***C***
     - :file_folder: ***Program Files***
       - :file_folder: ***Example Company*** <sup>*</sup>
@@ -61,5 +82,6 @@ But line that starts with `/` and `C\` can cause an error.
 ::: C\Program Files\Example Company\Example Product File.dll
 ::: /d C\Program Files\Example Company\Example Product
 ::: /d C\Users\(Name)\Appdata\Roaming\Example Company\Example Product Data Folder
-::: regedit -s registry_key.reg
+::: regedit -s "add registry key.reg"
+::: // regedit -s "del registry key.reg"
 ```
