@@ -21,7 +21,7 @@ for /f "usebackq delims=" %%A in (` findstr /b ::: "%~f0" `) do (
     set i=!i:~4!
     set par=!i:~0,2!
     for /f "usebackq delims=" %%I in (` powershell "if ('!par!' -like '/*' -or '!par!' -like 'C\') {echo 1} else {echo 2}" `) do (
-        if %%I EQU 2 ( !i! ) else (
+        if %%I EQU 2 ( for /f "usebackq delims=" %%J in (` powershell "'!i!'.replace('%%','%%')" `) do %%J ) else (
             if "!par!"=="//" ( echo !i:~3!>> .usi ) else (
                 if "!par!"=="C\" (
                     set "source=!i!"
@@ -72,5 +72,5 @@ setlocal DisableDelayedExpansion
 echo Done!
 pause
 
-::: echo Please read https://github.com/wvzxn/universal-symlink-installer#usage
+::: echo Please read the manual
 ::: start "" https://github.com/wvzxn/universal-symlink-installer#usage
