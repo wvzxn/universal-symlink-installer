@@ -1,6 +1,6 @@
 # UNIVERSAL SYMLINK INSTALLER
 
-##### *version: 1.3*
+##### *version: 1.4*
 
 Simple script that will help you speed up the Symlink creation process on Windows OS.  
 It acts as both an installer and a uninstaller.
@@ -50,12 +50,14 @@ ___
 
 You can also run standard commands like `md`, `icacls` etc. <sup>*In this case, you can use quotation marks*</sup>
 
+:heavy_check_mark: `::: md "%CommonProgramFiles%\dir %UserName%"`  
 :heavy_check_mark: `::: attrib +h "C\..\..\file"`  
 :heavy_check_mark: `::: echo Adding reg key...`  
 :heavy_check_mark: `::: regedit -s add_key.reg`
 
 To execute the command only on uninstall add `//` parameter to the beginning of the line.
 
+:heavy_check_mark: `::: // rd /s /q "%CommonProgramFiles%\dir %UserName%"`  
 :heavy_check_mark: `::: // attrib -h "C\..\..\file"`  
 :heavy_check_mark: `::: // echo Removing reg key...`  
 :heavy_check_mark: `::: // regedit -s del_key.reg`
