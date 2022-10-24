@@ -1,6 +1,6 @@
 # UNIVERSAL SYMLINK INSTALLER
 
-##### *version: 1.4*
+##### *version: 1.4f*
 
 Simple script that will help you speed up the Symlink creation process on Windows OS.  
 It acts as both an installer and a uninstaller.
