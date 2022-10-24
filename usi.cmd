@@ -1,4 +1,4 @@
-:: Universal Symlink Installer v1.3
+:: Universal Symlink Installer v1.4f
 :: Author: wvzxn // https://github.com/wvzxn/universal-symlink-installer
 @echo off
 if not "%1"=="am_admin" ( powershell start -verb runas '%0' 'am_admin "%~1" "%~2"' & exit )
@@ -60,8 +60,7 @@ for /f "tokens=*" %%A in (.usi) do (
     set "par=%%A" & set par=!par:~0,2!
     if "!par!"=="C:" (
         echo - %%A
-        del /q "%%A"
-        rd /s /q "%%A"
+        if exist "%%A\*" ( rd /q "%%A" ) else ( del /q "%%A" )
     ) else ( %%A )
 )
 del /q /f .usi
