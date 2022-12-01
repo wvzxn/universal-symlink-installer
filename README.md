@@ -2,7 +2,7 @@
 
 ##### *version: 1.5j*
 
-Simple script that will help you speed up the Symlink creation process on Windows OS.  
+Simple script that will help you speed up the Symlink creation process on Windows.  
 It acts as both installer and uninstaller.
 
 ## Usage
