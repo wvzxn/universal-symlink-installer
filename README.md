@@ -1,9 +1,9 @@
 # UNIVERSAL SYMLINK INSTALLER
 
-##### *version: 1.4f*
+##### *version: 1.5*
 
 Simple script that will help you speed up the Symlink creation process on Windows OS.  
-It acts as both an installer and a uninstaller.
+It acts as both installer and uninstaller.
 
 ## Usage
 1. Place the [**`usi.cmd`**](https://github.com/wvzxn/universal-symlink-installer/releases/latest/download/usi.cmd) file near the folder **`C`**, which may contain folders **`Program Files`**, **`ProgramData`**, **`Users`**, etc.
@@ -27,10 +27,10 @@ To work correctly, you must recreate the system folder structure:
 ## Commands
 
 Lines starting with `:::` are recognized by the script as commands to execute. <sup>*Do not confuse with comments `::`*</sup>
-
-:heavy_check_mark: `:: C\..\..` - a comment, nothing will happen  
+  
 :heavy_check_mark: `::: C\..\..` - the correct command  
-:x: `:::: C\..\..` , `::::: C\..\..` - may cause an error
+:warning: `:: C\..\..` , `:::C\..\..` , `:::: C\..\..` - a comment, nothing will happen  
+:x: `:C\..\..` - may cause an error
 
 ___
 
@@ -41,26 +41,26 @@ The script recognizes the shortened [`mklink`](https://ss64.com/nt/mklink.html) 
 - `/h C\..\..`&nbsp;&nbsp; — &nbsp;&nbsp;Hard link  
 - `/j C\..\..`&nbsp;&nbsp; — &nbsp;&nbsp;Directory Junction
 
-There is no need to put quotation marks
+There is no need to put quotation marks:
 
 :heavy_check_mark: `::: C\..\..\file`  
 :x: `::: "C\..\..\file"`
 
 ___
 
-You can also run standard commands like `md`, `icacls` etc. <sup>*In this case, you can use quotation marks*</sup>
+You can also run standard commands like `md`, `icacls` etc. <sup>*In this case, you can use quotation marks*</sup>  
+Use `!` instead of `%` to call a variable.
 
-:heavy_check_mark: `::: md "%CommonProgramFiles%\dir %UserName%"`  
-:heavy_check_mark: `::: attrib +h "C\..\..\file"`  
+:heavy_check_mark: `::: md "!CommonProgramFiles!\dir !UserName!"`  
 :heavy_check_mark: `::: echo Adding reg key...`  
-:heavy_check_mark: `::: regedit -s add_key.reg`
+:heavy_check_mark: `::: regedit -s "add_key.reg"`  
+:warning: `::: for /f %%A in (' findstr .. ') do ..` - may cause an error
 
 To execute the command only on uninstall add `//` parameter to the beginning of the line.
 
-:heavy_check_mark: `::: // rd /s /q "%CommonProgramFiles%\dir %UserName%"`  
-:heavy_check_mark: `::: // attrib -h "C\..\..\file"`  
+:heavy_check_mark: `::: // rd /s /q "!CommonProgramFiles!\dir !UserName!"`  
 :heavy_check_mark: `::: // echo Removing reg key...`  
-:heavy_check_mark: `::: // regedit -s del_key.reg`
+:heavy_check_mark: `::: // regedit -s "del_key.reg"`
 
 ## Example
 - :file_folder: ***Example Folder***
