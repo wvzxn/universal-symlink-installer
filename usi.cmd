@@ -1,4 +1,4 @@
-::         Name: Universal Symlink Installer v1.5
+::         Name: Universal Symlink Installer v1.5i
 ::       Author: wvzxn // https://github.com/wvzxn/
 ::  Description: Simple script that will help you speed up the Symlink creation process on Windows OS.
 ::               It acts as both installer and uninstaller.
@@ -78,6 +78,10 @@ exit /b
 :userPrompt
 for /f "usebackq delims=" %%K in (` powershell "[Console]::ReadKey($true).Key" `) do if not "%%K"=="%*" ( exit )
 exit /b
+
+:: ---------------------------------------------------------------------------
+::                  ↓ Specify the commands to process below ↓
+:: ---------------------------------------------------------------------------
 
 ::: cls
 ::: echo !_!
