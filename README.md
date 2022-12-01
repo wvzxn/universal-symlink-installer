@@ -1,6 +1,6 @@
 # UNIVERSAL SYMLINK INSTALLER
 
-##### *version: 1.5*
+##### *version: 1.5i*
 
 Simple script that will help you speed up the Symlink creation process on Windows OS.  
 It acts as both installer and uninstaller.
@@ -89,4 +89,5 @@ To execute the command only on uninstall add `//` parameter to the beginning of 
 ::: regedit -s "add registry key.reg"
 ::: // regedit -s "del registry key.reg"
 ```
-![image](https://user-images.githubusercontent.com/87862400/196798049-839c3736-d44b-44b6-b2a6-88a2aa4b78a9.png)
+![image](https://user-images.githubusercontent.com/87862400/205160339-020a3d1f-b2f7-49da-b069-2577ac885cc3.png)
+
