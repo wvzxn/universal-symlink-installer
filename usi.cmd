@@ -1,6 +1,6 @@
 ::         Name: Universal Symlink Installer v1.5j
 ::       Author: wvzxn // https://github.com/wvzxn/
-::  Description: Simple script that will help you speed up the Symlink creation process on Windows OS.
+::  Description: Simple script that will help you speed up the Symlink creation process on Windows.
 ::               It acts as both installer and uninstaller.
 ::               Learn how to use at https://github.com/wvzxn/universal-symlink-installer#usage
 
