@@ -27,10 +27,20 @@ To work correctly, you must recreate the system folder structure:
 ## Commands
 
 Lines starting with `:::` are recognized by the script as commands to execute. <sup>*Do not confuse with comments `::`*</sup>
-  
-:heavy_check_mark: `::: C\..\..` - the correct command  
-:warning: `:: C\..\..` , `:::C\..\..` , `:::: C\..\..` - a comment, nothing will happen  
-:x: `:C\..\..` - may cause an error
+
+Correct command:
+
+:heavy_check_mark: `::: C\..\..`
+
+Comment, nothing will happen:
+
+:warning: `:: C\..\..`  
+:warning: `:::C\..\..`  
+:warning: `:::: C\..\..`  
+
+This may cause an error:
+
+:x: `:C\..\..`
 
 ### Basic mode (Manual path entry)
 
@@ -43,7 +53,8 @@ The script recognizes the shortened [`mklink`](https://ss64.com/nt/mklink.html) 
 
 There is no need to put quotation marks:
 
-:heavy_check_mark: `::: C\..\..\file`  
+:heavy_check_mark: `::: C\..\..\file`
+
 :x: `::: "C\..\..\file"`
 
 ### Automatic mode (Regex)
@@ -61,9 +72,11 @@ You can also specify the symlink type for folders:
 Folders that match: `TEST+FOLDER` , `TestFolder` , `test folder`:
 
 :heavy_check_mark: `::: /r test.?folder` - symbolic link  
-:heavy_check_mark: `::: /r /j TEST.*?folder` - junction  
-:warning: `::: /r /j test.*folder` - `.*` may cause an error  
-:x: `::: /r testfolder` - not matches with `TEST+FOLDER` , `test folder`
+:heavy_check_mark: `::: /r /j TEST.*?folder` - junction
+
+:warning: `::: /r /j test.*folder` - `.*` may cause an error
+
+:x: `::: /r testfolder` - not matches with `TEST+FOLDER` , `test folder`  
 :x: `::: /r test folder` - not matches with `TestFolder`
 
 ### Other commands
@@ -73,14 +86,15 @@ Use `!` instead of `%` to call a variable.
 
 :heavy_check_mark: `::: md "!CommonProgramFiles!\dir !UserName!"`  
 :heavy_check_mark: `::: echo Adding reg key...`  
-:heavy_check_mark: `::: regedit -s "add_key.reg"`  
-:x: `::: for /f %%A in (' findstr .. ') do ..` - cause an error
+:heavy_check_mark: `::: regedit -s "add_key.reg"`
+
+:x: `::: for /f ..` - will cause an error
 
 To execute the command only on uninstall add `//` parameter to the beginning of the line.
 
-:heavy_check_mark: `::: // rd /s /q "!CommonProgramFiles!\dir !UserName!"`  
-:heavy_check_mark: `::: // echo Removing reg key...`  
-:heavy_check_mark: `::: // regedit -s "del_key.reg"`
+`::: // rd /s /q "!CommonProgramFiles!\dir !UserName!"`  
+`::: // echo Removing reg key...`  
+`::: // regedit -s "del_key.reg"`
 
 ## Examples
 
