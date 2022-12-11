@@ -1,6 +1,6 @@
 # UNIVERSAL SYMLINK INSTALLER
 
-##### *version: 1.5j*
+##### *version: 1.6*
 
 Simple script that will help you speed up the Symlink creation process on Windows.  
 It acts as both installer and uninstaller.
@@ -32,12 +32,12 @@ Lines starting with `:::` are recognized by the script as commands to execute. <
 :warning: `:: C\..\..` , `:::C\..\..` , `:::: C\..\..` - a comment, nothing will happen  
 :x: `:C\..\..` - may cause an error
 
-___
+### Basic mode (Manual path entry)
 
 The script recognizes the shortened [`mklink`](https://ss64.com/nt/mklink.html) command as shown below:
 
 - `C\..\..`&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; — &nbsp;&nbsp;(default)  
-- `/d C\..\..`&nbsp;&nbsp; — &nbsp;&nbsp;Directory symbolic link (from [v1.3](https://github.com/wvzxn/universal-symlink-installer/releases/tag/v1.3) not necessary)  
+- `/d C\..\..`&nbsp;&nbsp; — &nbsp;&nbsp;Directory symbolic link (from [v1.3](https://github.com/wvzxn/universal-symlink-installer/releases/tag/v1.3) can be omitted)  
 - `/h C\..\..`&nbsp;&nbsp; — &nbsp;&nbsp;Hard link  
 - `/j C\..\..`&nbsp;&nbsp; — &nbsp;&nbsp;Directory Junction
 
@@ -46,7 +46,27 @@ There is no need to put quotation marks:
 :heavy_check_mark: `::: C\..\..\file`  
 :x: `::: "C\..\..\file"`
 
-___
+### Automatic mode (Regex)
+
+The `/r` parameter activates automatic mode for the current line.
+
+The script searches for the nearest matches in the path.  
+You can also specify the symlink type for folders:
+
+- `/d ..`&nbsp;&nbsp; — &nbsp;&nbsp;Directory symbolic link (can be omitted)
+- `/j ..`&nbsp;&nbsp; — &nbsp;&nbsp;Directory Junction
+
+#### Example
+
+Folders that match: `TEST+FOLDER` , `TestFolder` , `test folder`:
+
+:heavy_check_mark: `::: /r test.?folder` - symbolic link  
+:heavy_check_mark: `::: /r /j TEST.*?folder` - junction  
+:warning: `::: /r /j test.*folder` - `.*` may cause an error  
+:x: `::: /r testfolder` - not matches with `TEST+FOLDER` , `test folder`
+:x: `::: /r test folder` - not matches with `TestFolder`
+
+### Other commands
 
 You can also run standard commands like `md`, `icacls` etc. <sup>*In this case, you can use quotation marks*</sup>  
 Use `!` instead of `%` to call a variable.
@@ -54,7 +74,7 @@ Use `!` instead of `%` to call a variable.
 :heavy_check_mark: `::: md "!CommonProgramFiles!\dir !UserName!"`  
 :heavy_check_mark: `::: echo Adding reg key...`  
 :heavy_check_mark: `::: regedit -s "add_key.reg"`  
-:warning: `::: for /f %%A in (' findstr .. ') do ..` - may cause an error
+:x: `::: for /f %%A in (' findstr .. ') do ..` - cause an error
 
 To execute the command only on uninstall add `//` parameter to the beginning of the line.
 
@@ -62,7 +82,33 @@ To execute the command only on uninstall add `//` parameter to the beginning of 
 :heavy_check_mark: `::: // echo Removing reg key...`  
 :heavy_check_mark: `::: // regedit -s "del_key.reg"`
 
-## Example
+## Examples
+
+### Example 1 (Automatic + Manual)
+
+- :file_folder: ***Example Folder***
+  - :hammer_and_wrench: ***usi.cmd***
+  - :file_folder: ***C***
+    - :file_folder: ***Program Files***
+      - :file_folder: ***Example Company*** <sup>*</sup>
+        - :file_folder: ***Example Product Folder***
+        - :gear: ***Example Product File.dll***
+    - :file_folder: ***Users***
+      - :file_folder: ***(Name)***
+        - :file_folder: ***Appdata***
+          - :file_folder: ***Roaming***
+            - :file_folder: ***Example Company*** <sup>*</sup>
+              - :file_folder: ***Example Product Data Folder***
+
+<sup>* — *Will be automatically created if not exist*</sup>
+
+```
+::: /r example.?product.*?
+::: C\Program Files\Example Company\Example Product File.dll
+```
+
+### Example 2 (Manual)
+
 - :file_folder: ***Example Folder***
   - :hammer_and_wrench: ***usi.cmd***
   - :old_key: ***add registry key.reg***
@@ -70,7 +116,7 @@ To execute the command only on uninstall add `//` parameter to the beginning of 
   - :file_folder: ***C***
     - :file_folder: ***Program Files***
       - :file_folder: ***Example Company*** <sup>*</sup>
-        - :file_folder: ***Example Product***
+        - :file_folder: ***Example Product Folder***
         - :gear: ***Example Product File.dll***
     - :file_folder: ***Users***
       - :file_folder: ***(Name)***
@@ -89,5 +135,5 @@ To execute the command only on uninstall add `//` parameter to the beginning of 
 ::: regedit -s "add registry key.reg"
 ::: // regedit -s "del registry key.reg"
 ```
-![image](https://user-images.githubusercontent.com/87862400/205160339-020a3d1f-b2f7-49da-b069-2577ac885cc3.png)
 
+![image](https://user-images.githubusercontent.com/87862400/205160339-020a3d1f-b2f7-49da-b069-2577ac885cc3.png)
