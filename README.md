@@ -11,7 +11,7 @@ It acts as both installer and uninstaller.
 3. Run [**`usi.cmd`**](https://github.com/wvzxn/universal-symlink-installer/releases/latest/download/usi.cmd).
 
 To work correctly, you must recreate the system folder structure:
-- :file_folder: ***..***
+- :file_folder: ***root***
   - :hammer_and_wrench: ***usi.cmd***
   - :file_folder: ***C***
     - :file_folder: ***..***
