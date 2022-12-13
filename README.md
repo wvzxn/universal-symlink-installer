@@ -1,6 +1,6 @@
 # UNIVERSAL SYMLINK INSTALLER
 
-##### *version: 1.6*
+##### *version: 1.6f*
 
 Simple script that will help you speed up the Symlink creation process on Windows.  
 It acts as both installer and uninstaller.
@@ -22,7 +22,9 @@ To work correctly, you must recreate the system folder structure:
       - :file_folder: ***(Name)***
         - :file_folder: ***..***
 
-*`(Name)` will be changed to [`%username%`](https://ss64.com/nt/syntax-variables.html)*
+`(Name)` will be changed to [`%username%`](https://ss64.com/nt/syntax-variables.html)
+
+:warning: Do not use these characters in the name of the root folder: `!%*[]|^`
 
 ## Commands
 
