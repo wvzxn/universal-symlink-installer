@@ -62,7 +62,7 @@ if "!i:~0,4!"=="/r /" (
     set "par=/d "
     set "i=!i:~3!"
 )
-for /f "usebackq delims=" %%J in (` powershell "((gci '!dp0!' -directory -recurse).fullname) -replace [regex]::escape('!dp0!'),''|?{$_ -match '!i!$' -and $_ -notmatch 'C\\.*?!i!.*?!i!'}" `) do (
+for /f "usebackq delims=" %%J in (` powershell "((gci '!dp0!' -directory -recurse).fullname) -replace [regex]::escape('!dp0!'),''|?{$_ -match '(!i!)$' -and $_ -notmatch 'C\\.*?(!i!).*?(!i!)'}" `) do (
     set "src=%%J"
     call:usiSet_mklink
 )
