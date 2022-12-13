@@ -1,5 +1,6 @@
-::         Name: Universal Symlink Installer v1.6
+::         Name: Universal Symlink Installer v1.6f
 ::       Author: wvzxn // https://github.com/wvzxn/
+::  
 ::  Description: Simple script that will help you speed up the Symlink creation process on Windows.
 ::               It acts as both installer and uninstaller.
 ::               Learn how to use at https://github.com/wvzxn/universal-symlink-installer#usage
@@ -39,13 +40,13 @@ for /f "usebackq delims=" %%A in (` findstr /b /c:"::: " "!f0!" `) do (
         )
     )
 )
-if exist .usi ( attrib +r +h "%~dp0.usi" >nul 2>&1 & icacls "%~dp0.usi" /deny *S-1-1-0:F >nul 2>&1 )
+if exist .usi ( attrib +r +h "!dp0!.usi" >nul 2>&1 & icacls "!dp0!.usi" /deny *S-1-1-0:F >nul 2>&1 )
 exit /b
 
 :usiSet_parDestSrc
 if "!par!"=="C\" (
     set "src=!i!"
-    if exist "%~dp0!src!\*" ( set "par=/d ") else ( set "par=")
+    if exist "!dp0!!src!\*" ( set "par=/d ") else ( set "par=")
 ) else (
     set "src=!i:~3!"
     set "par=!par! "
@@ -61,7 +62,7 @@ if "!i:~0,4!"=="/r /" (
     set "par=/d "
     set "i=!i:~3!"
 )
-for /f "usebackq delims=" %%J in (` powershell "$a=gci '!dp0!C' -directory -recurse|?{$_.name -match '!i!' -and $_.fullname -notmatch 'C\\.*?!i!.*!i!'};$a.fullname|%%{$_ -replace '!dp0:\=\\!',''}" `) do (
+for /f "usebackq delims=" %%J in (` powershell "((gci '!dp0!' -directory -recurse).fullname) -replace [regex]::escape('!dp0!'),''|?{$_ -match '!i!$' -and $_ -notmatch 'C\\.*?!i!.*?!i!'}" `) do (
     set "src=%%J"
     call:usiSet_mklink
 )
@@ -79,7 +80,7 @@ exit /b 0
 call:centerText Press ^[Enter^] to Uninstall
 call:userPrompt Enter
 echo.
-icacls "%~dp0.usi" /reset >nul 2>&1 & attrib -r -h "%~dp0.usi" >nul 2>&1
+icacls ".usi" /reset >nul 2>&1 & attrib -r -h ".usi" >nul 2>&1
 for /f "tokens=*" %%A in (.usi) do (
     set "par=%%A"
     if "!par:~0,2!"=="C:" (
@@ -99,9 +100,9 @@ exit /b
 for /f "usebackq delims=" %%J in (` powershell "[Console]::ReadKey($true).Key" `) do if not "%%J"=="%*" ( exit )
 exit /b
 
-:::: [-------------------------------------------------------------] ::::
-:::: [           ↓ Specify the commands to process below ↓         ] ::::
-:::: [-------------------------------------------------------------] ::::
+:: [-------------------------------------------------------------] ::
+:: [           ↓ Specify the commands to process below ↓         ] ::
+:: [-------------------------------------------------------------] ::
 
 ::: cls
 ::: echo !_!
