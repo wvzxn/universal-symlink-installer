@@ -1,6 +1,6 @@
 # UNIVERSAL SYMLINK INSTALLER
 
-##### *version: 1.6f*
+##### *version: 1.6f2*
 
 Simple script that will help you speed up the Symlink creation process on Windows.  
 It acts as both installer and uninstaller.
@@ -74,6 +74,7 @@ You can also specify the symlink type for folders:
 Folders that match: `TEST+FOLDER` , `TestFolder` , `test folder`:
 
 :heavy_check_mark: `::: /r test.?folder` - symbolic link  
+:heavy_check_mark: `::: /r test.?f.*?` - symbolic link  
 :heavy_check_mark: `::: /r /j TEST.*?folder` - junction
 
 :warning: `::: /r /j test.*folder` - `.*` may cause an error
