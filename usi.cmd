@@ -1,4 +1,4 @@
-::         Name: Universal Symlink Installer v1.6f
+::         Name: Universal Symlink Installer v1.6f2
 ::       Author: wvzxn // https://github.com/wvzxn/
 ::  
 ::  Description: Simple script that will help you speed up the Symlink creation process on Windows.
@@ -62,7 +62,7 @@ if "!i:~0,4!"=="/r /" (
     set "par=/d "
     set "i=!i:~3!"
 )
-for /f "usebackq delims=" %%J in (` powershell "((gci '!dp0!' -directory -recurse).fullname) -replace [regex]::escape('!dp0!'),''|?{$_ -match '(!i!)$' -and $_ -notmatch 'C\\.*?(!i!).*?(!i!)'}" `) do (
+for /f "usebackq delims=" %%J in (` powershell "$a=gci '!dp0!' -directory -recurse|?{$_.name -match '!i!' -and $_.fullname -notmatch '\\C\\.*?(!i!\\).*?(!i!)'};$a.fullname -replace [regex]::escape('!dp0!'),''" `) do (
     set "src=%%J"
     call:usiSet_mklink
 )
