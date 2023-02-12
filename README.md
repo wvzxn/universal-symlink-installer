@@ -1,8 +1,6 @@
 # UNIVERSAL SYMLINK INSTALLER
 
-#### *version: 1.7*
-
-Simple script that will help you speed up the Symlink creation process on Windows.  
+Simple script that will help you create Symlinks faster.  
 It acts as both installer and uninstaller.
 
 ## Usage
@@ -24,7 +22,7 @@ To work correctly, you must recreate the system folder structure:
 
 `(Name)` will be changed to [`%username%`](https://ss64.com/nt/syntax-variables.html)
 
-:warning: Do not use these characters in the name of the root folder: `!%*[]|^`
+:warning: Do not use these characters in the name of the root folder: `!@%^&[]'`
 
 ## Commands
 
