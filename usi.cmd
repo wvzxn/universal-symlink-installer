@@ -1,4 +1,4 @@
-::  Universal Symlink Installer v1.8
+::  Universal Symlink Installer v1.8a
 ::  
 ::  [Author]
 ::    wvzxn | https://github.com/wvzxn/
@@ -180,19 +180,10 @@ exit /b
 :MAIN
 if "%~1"=="MKLINK" (
 	if "!DEBUG!"=="true" (
-		echo mklink !par!^"!dest!^" ^"!dp0!!src!^" ^>nul
+		echo mklink !par!^"!dest!^" ^"!dp0!!src!^"
 	) else (
-		mklink !par!"!dest!" "!dp0!!src!" >nul
+		mklink !par!"!dest!" "!dp0!!src!"
 	)
-	if !ERRORLEVEL! EQU 0 (
-		powershell "write-host '[+] ' -nonewline"
-		echo !dest!>> .usi
-	) else (
-		setlocal DisableDelayedExpansion
-		powershell "write-host '[!] ' -nonewline"
-		setlocal EnableDelayedExpansion
-	)
-	powershell "$a='!dest!';write-host $a -nonewline;for($i=1;$i -le (58-$a.length);$i++){write-host ' ' -nonewline}"& echo. ==^> !dp0!!src!
 )
 if "%~1"=="JUNK" (
 	if "!DEBUG!"=="true" (
