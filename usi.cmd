@@ -1,4 +1,4 @@
-::  Universal Symlink Installer v1.8a
+::  Universal Symlink Installer v1.8b
 ::  
 ::  [Author]
 ::    wvzxn | https://github.com/wvzxn/
@@ -183,6 +183,7 @@ if "%~1"=="MKLINK" (
 		echo mklink !par!^"!dest!^" ^"!dp0!!src!^"
 	) else (
 		mklink !par!"!dest!" "!dp0!!src!"
+		if !ERRORLEVEL! EQU 0 ( !dest!>> .usi)
 	)
 )
 if "%~1"=="JUNK" (
