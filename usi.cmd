@@ -1,4 +1,4 @@
-::  Universal Symlink Installer v1.8c
+::  Universal Symlink Installer v1.8d
 ::  
 ::  [Author]
 ::    wvzxn | https://github.com/wvzxn/
@@ -112,12 +112,27 @@ for /f "usebackq delims=" %%J in (` powershell "gci '!dp0!' -recurse|?{($_.PSisC
 )
 exit /b
 
+:junk
+if exist "!dest!" (
+	if exist "!dest!\*" (
+		call :MAIN "JUNK" "rd /q"
+		if exist "!dest!\*" (
+			echo ^[?^] ^"!dest!^" already exists, it will be deleted
+			pause
+			call :MAIN "JUNK" "rd /s /q"
+		)
+	) else (
+		call :MAIN "JUNK" "del /q"
+	)
+)
+exit /b
+
 :mklink
 set "dest=C:!src:~1!"
 set "dest=!dest:(Name)=%USERNAME%!"
 for /f "usebackq delims=" %%K in (` powershell "split-path '!dest!' -parent" `) do (
 	set "dest_parent=%%K"
-	rem call :MAIN "JUNK"
+	call :junk
 	call :MAIN "MD"
 )
 call :MAIN "MKLINK"
@@ -189,11 +204,9 @@ if "%~1"=="MKLINK" (
 )
 if "%~1"=="JUNK" (
 	if "!DEBUG!"=="true" (
-		if exist "!dest!\*" ( echo rd /s /q ^"!dest!^")
-		if exist "!dest!" ( echo del /q ^"!dest!^")
+		echo %~2 ^"!dest!^" 2^>nul
 	) else (
-		if exist "!dest!\*" ( rd /s /q "!dest!")
-		if exist "!dest!" ( del /q "!dest!")
+		%~2 "!dest!" 2>nul
 	)
 )
 if "%~1"=="MD" (
@@ -220,9 +233,17 @@ if "%~1"=="MANUAL2DEL" (
 
 if "%~1"==".USI_REMOVE_LINKS" (
 	if "!DEBUG!"=="true" (
-		if exist "!.usi_remove_links!\*" ( echo rd /q ^"!.usi_remove_links!^") else ( echo del /q ^"!.usi_remove_links!^")
+		if exist "!.usi_remove_links!\*" (
+			echo rd /q ^"!.usi_remove_links!^"
+		) else (
+			echo del /q ^"!.usi_remove_links!^"
+		)
 	) else (
-		if exist "!.usi_remove_links!\*" ( rd /q "!.usi_remove_links!") else ( del /q "!.usi_remove_links!")
+		if exist "!.usi_remove_links!\*" (
+			rd /q "!.usi_remove_links!"
+		) else (
+			del /q "!.usi_remove_links!"
+		)
 	)
 )
 if "%~1"==".USI_PARENT" (
