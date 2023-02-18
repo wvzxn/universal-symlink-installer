@@ -53,7 +53,7 @@ set "dp0=%~dp0"
 set "f0=%~f0"
 set "________=[=============================================================]"
 cd /d "!dp0!"
-for %%Q in (.) do set "folderName=%%~nQ"
+for /f "usebackq delims=" %%Q in (` powershell "'!dp0!' -replace '.+\\(.+)\\$','$1'"`) do set "folderName=%%Q"
 exit /b
 
 :UAC
