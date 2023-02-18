@@ -1,4 +1,4 @@
-::  Universal Symlink Installer v1.8d
+::  Universal Symlink Installer v1.9
 ::  
 ::  [Author]
 ::    wvzxn | https://github.com/wvzxn/
@@ -10,27 +10,27 @@
 ::    https://github.com/wvzxn/universal-symlink-installer#usage
 
 @echo off
-rem // true/false
+rem # true/false
 set "DEBUG=false"
 
-rem //      CHECK and SETUP
+rem #		CHECK
 title %~nx0
 call :testFolderName exit
 setlocal EnableDelayedExpansion
 call :setGlobalVar
 echo !________!
 call :intro
-for /f "usebackq delims=" %%A in (` powershell "'!folderName!'.ToUpper()"`) do call :centerText "%%A"
+for /f "usebackq delims=" %%Q in (` powershell "'!folderName!'.ToUpper()"`) do call :centerText "%%Q"
 echo !________!
 call :UAC
 
-rem //      START
-if exist .usi ( call :usiDel) else ( call :usiSet)
+rem #		START
+if not exist .usi ( call :INSTALL) else ( call :UNINSTALL)
 pause
 exit
 
 :testFolderName
-for %%A in (.) do set "a=%%~nA"
+for %%Q in (.) do set "a=%%~nQ"
 set "a=%a:'=@%"
 set "a=%a:!=@%"
 set "a=%a:^=@%"
@@ -39,7 +39,7 @@ set "a=%a:[=@%"
 set "a=%a:]=@%"
 setlocal EnableDelayedExpansion
 set "a=!a:%%=@!"
-for /f "usebackq delims=" %%A in (` powershell "'!a!' -match '\@'"`) do set "b=%%A"
+for /f "usebackq delims=" %%Q in (` powershell "'!a!' -match '\@'"`) do set "b=%%Q"
 setlocal DisableDelayedExpansion
 if "%b%"=="True" (
 	echo The folder name contains forbidden characters !@%%^^^&^[^]'
@@ -53,7 +53,7 @@ set "dp0=%~dp0"
 set "f0=%~f0"
 set "________=[=============================================================]"
 cd /d "!dp0!"
-for %%A in (.) do set "folderName=%%~nA"
+for %%Q in (.) do set "folderName=%%~nQ"
 exit /b
 
 :UAC
@@ -87,18 +87,51 @@ for /f "usebackq delims=" %%Q in (` powershell "!INTRO!" `) do (
 )
 exit /b
 
-:getMklinkVariables
-if "!par!"=="C\" (
-    set "src=!i!"
-    if exist "!dp0!!src!\*" ( set "par=/d ") else ( set "par=")
-) else (
-    set "src=!i:~3!"
-    set "par=!par! "
+:INSTALL
+call :centerText "Press [Y] to Install"
+call :userPrompt "Y" "exit"
+echo.
+for /f "usebackq delims=" %%A in (` findstr /b /c:"::: " "!f0!" `) do (
+    set "i=%%A"
+    set "i=!i:~4!"
+	call :job
 )
-call :mklink
+if exist .usi ( attrib +r +h .usi >nul)
 exit /b
 
-:getMklinkVariables_regex
+:job
+if "!i:~0,2!"=="//" (
+	rem #	Save manual [// <code>] to .usi
+	set "manual2del=!i:~3!"
+    call :MAIN "MANUAL2DEL"
+	goto :jobExit
+)
+if "!i:~0,2!"=="C\" ( goto :jobLink)
+if not "!i:~0,1!"=="/" (
+	rem #	Execute manual [<code>]
+	set "manual=!i!"
+	call :MAIN "MANUAL"
+	goto :jobExit
+)
+if "!i:~0,2!"=="/r" (
+	rem #	Automatically find paths and run mklink [/r <regex>]
+	call :regex
+	goto :jobExit
+)
+:jobLink
+rem #	Run mklink [<code>]
+if "!i:~0,2!"=="C\" (
+	set "src=!i!"
+	if exist "!dp0!!src!\*" ( set "par=/d ") else ( set "par=")
+) else (
+	set "src=!i:~3!"
+	set "par=!i:~0,2! "
+)
+call :mklink
+:jobExit
+exit /b
+
+:regex
 if "!i:~0,4!"=="/r /" (
     set "par=!i:~3,3!"
     set "i=!i:~6!"
@@ -106,10 +139,21 @@ if "!i:~0,4!"=="/r /" (
     set "par=/d "
     set "i=!i:~3!"
 )
-for /f "usebackq delims=" %%J in (` powershell "gci '!dp0!' -recurse|?{($_.PSisContainer) -and ($_.name -match '(!i!)') -and ($_.fullname -notmatch '\\C\\.*?(!i!).*?(!i!)')}|%%{$_.fullname -replace [regex]::escape('!dp0!'),''}|sort" `) do (
-    set "src=%%J"
-    call :mklink
+for /f "usebackq delims=" %%B in (` powershell "gci '!dp0!' -recurse|?{($_.PSisContainer) -and ($_.name -match '(!i!)') -and ($_.fullname -notmatch '\\C\\.*?(!i!).*?(!i!)')}|%%{$_.fullname -replace [regex]::escape('!dp0!'),''}|sort"`) do (
+	set "src=%%B"
+	call :mklink
 )
+exit /b
+
+:mklink
+set "dest=C:!src:~1!"
+set "dest=!dest:(Name)=%USERNAME%!"
+for /f "usebackq delims=" %%K in (` powershell "split-path '!dest!' -parent" `) do (
+	set "dest_parent=%%K"
+	call :junk
+	call :MAIN "MD"
+)
+call :MAIN "MKLINK"
 exit /b
 
 :junk
@@ -127,69 +171,57 @@ if exist "!dest!" (
 )
 exit /b
 
-:mklink
-set "dest=C:!src:~1!"
-set "dest=!dest:(Name)=%USERNAME%!"
-for /f "usebackq delims=" %%K in (` powershell "split-path '!dest!' -parent" `) do (
-	set "dest_parent=%%K"
-	call :junk
-	call :MAIN "MD"
-)
-call :MAIN "MKLINK"
-exit /b
-
-:usiSet
-call :centerText "Press [Y] to Install"
-call :userPrompt "Y" "exit"
-echo.
-for /f "usebackq delims=" %%A in (` findstr /b /c:"::: " "!f0!" `) do (
-    set "i=%%A"
-    set "i=!i:~4!"
-    set "par=!i:~0,2!"
-    for /f "usebackq delims=" %%I in (` powershell "'!par!' -match '(\/.?)|(C\\)'" `) do (
-        if "%%I"=="False" (
-            rem // Run manual <code>
-            set "manual=!i!"
-            call :MAIN "MANUAL"
-        ) else (
-            if "!par!"=="//" (
-                rem // Save manual [// <code>] to .usi
-				set "manual2del=!i:~3!"
-                call :MAIN "MANUAL2DEL"
-            ) else (
-                rem // Run mklink [/? <code>]
-                if "!par!"=="/r" ( call :getMklinkVariables_regex) else ( call :getMklinkVariables)
-            )
-        )
-    )
-)
-if exist .usi ( attrib +r +h .usi >nul)
-exit /b
-
-:usiDel
+:UNINSTALL
 call :centerText "Press [Enter] to Uninstall"
 call :userPrompt "Enter" "exit"
 echo.
 attrib -r -h .usi >nul 2>&1
 for /f "tokens=*" %%A in (.usi) do (
-    set "par=%%A"
-    if "!par:~0,2!"=="C:" (
-        rem // Delete created items (specified in .usi)
-		set ".usi_remove_links=%%A"
-        echo ^[-^] ^"!.usi_remove_links!^"
-		call :MAIN ".USI_REMOVE_LINKS"
-		rem // Delete parent folder (if empty)
-        for /f "usebackq delims=" %%I in (` powershell "split-path '!.usi_remove_links!' -parent" `) do (
-			set ".usi_parent=%%I"
-			call :MAIN ".USI_PARENT"
-		)
-    ) else (
-        rem // Run manual [// <code>] from .usi
-		set ".usi_manual=%%A"
-        call :MAIN ".USI_MANUAL"
-    )
+    set "i=%%A"
+	call :job2
 )
 call :MAIN ".USI_DEL"
+exit /b
+
+:job2
+if "!i:~0,2!"=="/s" (
+	rem #	Smart Delete .reg [// /s <path>]
+	set "i=!i:~3!"
+	for /f "usebackq delims=" %%B in (` powershell "(sls '^\[.+?\]' '!dp0!!i!').line|%%{$_ -replace '\[-(HKEY_.+?)\]','$1'}"`) do (
+    	set "b=%%B"
+    	set "b=!b:HKEY_CURRENT_USER=HKCU!"
+    	set "b=!b:HKEY_LOCAL_MACHINE=HKLM!"
+    	call :regSmartDel
+    	echo.
+	)
+	goto :job2Exit
+)
+if "!i:~0,2!"=="C:" (
+    rem #	Delete links [// <path>] + delete parent folder (if empty)
+	set ".usi_remove_links=!i!"
+    echo ^[-^] ^"!.usi_remove_links!^"
+	call :MAIN ".USI_REMOVE_LINKS"
+    for /f "usebackq delims=" %%B in (` powershell "split-path '!.usi_remove_links!' -parent"`) do (
+		set ".usi_parent=%%B"
+		call :MAIN ".USI_PARENT"
+	)
+	goto :job2Exit
+)
+rem #	Run manual [// <code>] from .usi
+set ".usi_manual=!i!"
+call :MAIN ".USI_MANUAL"
+:job2Exit
+exit /b
+
+:regSmartDel
+echo.
+set "_a=!b!"
+:loop
+call :MAIN ".USI_REGSMARTDEL"
+for /f "usebackq delims=" %%C in (` powershell "split-path '!_a!' -parent"`) do set "_a=%%C"
+set _b=0
+for /f "delims=" %%C in (' reg query "!_a!" 2^>nul') do set /a _b+=1
+if !_b! EQU 0 ( goto:loop)
 exit /b
 
 :MAIN
@@ -231,6 +263,13 @@ if "%~1"=="MANUAL2DEL" (
 	)
 )
 
+if "%~1"==".USI_REGSMARTDEL" (
+	if "!DEBUG!"=="true" (
+		echo reg delete ^"!_a!^" /f ^>nul 2^>^&1 ^&^& echo ^[-^] ^"!_a!^" ^|^| echo ^[?^] ^"!_a!^"
+	) else (
+		reg delete "!_a!" /f >nul 2>&1 && echo ^[-^] ^"!_a!^" || echo ^[?^] ^"!_a!^"
+	)
+)
 if "%~1"==".USI_REMOVE_LINKS" (
 	if "!DEBUG!"=="true" (
 		if exist "!.usi_remove_links!\*" (
@@ -269,7 +308,7 @@ if "%~1"==".USI_DEL" (
 )
 exit /b
 
-rem //      ↓ Specify the commands to process below ↓
+rem #		↓ Specify the commands to process below ↓
 
 ::: cls
 ::: echo !________!
