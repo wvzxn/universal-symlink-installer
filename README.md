@@ -97,6 +97,12 @@ To execute the command only on uninstall add `//` parameter to the beginning of 
 `::: // echo Removing reg key...`  
 `::: // regedit -s "del_key.reg"`
 
+#### .reg Smart Delete
+
+`::: // /s del_key.reg`
+
+This deletes empty keys after using del_key.reg
+
 ## Examples
 
 ### Example 1 (Automatic + Manual)
