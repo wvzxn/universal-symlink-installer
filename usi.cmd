@@ -1,4 +1,4 @@
-::  Universal Symlink Installer v1.9
+::  Universal Symlink Installer v1.9a
 ::  
 ::  [Author]
 ::    wvzxn | https://github.com/wvzxn/
@@ -187,7 +187,7 @@ exit /b
 if "!i:~0,2!"=="/s" (
 	rem #	Smart Delete .reg [// /s <path>]
 	set "i=!i:~3!"
-	for /f "usebackq delims=" %%B in (` powershell "(sls '^\[.+?\]' '!dp0!!i!').line|%%{$_ -replace '\[-(HKEY_.+?)\]','$1'}"`) do (
+	for /f "usebackq delims=" %%B in (` powershell "gc '!dp0!!i!'|?{$_ -match '^\[.+?\]'}|%%{$_ -replace '\[-(HKEY_.+?)\]','$1'}"`) do (
     	set "b=%%B"
     	set "b=!b:HKEY_CURRENT_USER=HKCU!"
     	set "b=!b:HKEY_LOCAL_MACHINE=HKLM!"
